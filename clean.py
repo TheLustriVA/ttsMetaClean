@@ -131,6 +131,22 @@ def to_json(text_list: list, dest_path: str) -> None:
     with open(dest_path, "w+", encoding="utf-8") as f:
         json.dump(list_container, f, indent=4)
 
+def clean_titles(text_list:list)->list:
+    title_list = []
+    title_clean_top = 0
+    title_clean_mid = 0
+    for idx, line in enumerate(text_list):
+        if line.isupper():
+            title_list.append(line)
+            if len(title_list) == 2:
+                title_clean_mid = idx
+                title_clean_top = idx-2
+            if len(title_list) == 3:
+                text_list[idx] = " ".join(title_list)
+                title_list = []
+                text_list.remove(text_list[title_clean_mid])
+                text_list.remove(text_list[title_clean_top])
+    return text_list
 
 def last_pass(text_list: str, dest_path: str) -> None:
     """_Cleans the text_list argument of unprintable and unwanted characters then writes it to a file._
@@ -155,8 +171,10 @@ if __name__ == "__main__":
     def main(text_path: str, dest_path: str, inf_eng: inflect.engine):
         """_Cleans the text_path argument and writes it to a file._"""
         last_pass(
-            clean_numbers_l(
-                clean_years_l(raw_list_from_file(text_path), inf_eng), inf_eng
+            clean_titles(
+                clean_numbers_l(
+                    clean_years_l(raw_list_from_file(text_path), inf_eng), inf_eng
+                ),
             ),
             dest_path,
         )
