@@ -22,6 +22,7 @@ Currently it is capable of:
 
 Future features include:
 
+ - Converting text to ngram form
  - A CLI interface
  - Removing citation lists
  - Removing footnotes
